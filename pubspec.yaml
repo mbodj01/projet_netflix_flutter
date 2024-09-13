@@ -7,8 +7,10 @@ environment:
   sdk: '>=3.3.4 <4.0.0'
 
 dependencies:
+  carousel_slider: ^5.0.0
   flutter:
     sdk: flutter
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
