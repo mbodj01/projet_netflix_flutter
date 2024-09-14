@@ -4,6 +4,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:http/http.dart' as http;
+import 'package:netflix/HomePage/SectionPage/movies.dart';
+import 'package:netflix/HomePage/SectionPage/tvseries.dart';
+import 'package:netflix/HomePage/SectionPage/upcoming.dart';
 import 'package:netflix/apilink/allapi.dart';
 
 class HomePage extends StatefulWidget {
@@ -166,16 +169,47 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           SliverList(
-            delegate: SliverChildListDelegate([
-              Center(
-                child: Text("Sample Text"),
-              ),
-              Container(
-                height: 45,
-                
-              ),
-            ])
+              delegate: SliverChildListDelegate([
+            Center(
+              child: Text("Sample Text"),
             ),
+            Container(
+              height: 45,
+              width: MediaQuery.of(context).size.width,
+              child: TabBar(
+                physics: BouncingScrollPhysics(),
+                labelPadding: EdgeInsets.symmetric(horizontal: 25),
+                isScrollable: true,
+                controller: _tabController,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.amber.withOpacity(0.4),
+                ),
+                tabs: [
+                  Tab(
+                    child: Text('TV Series'),
+                  ),
+                  Tab(
+                    child: Text('Movies'),
+                  ),
+                  Tab(
+                    child: Text('Upcoming'),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 1050,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  Tvseries(),
+                  Movies(),
+                  Upcoming(),
+                ],
+              ),
+            )
+          ])),
         ],
       ),
     );
