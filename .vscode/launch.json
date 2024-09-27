@@ -5,21 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "netflix",
+            "name": "Flutter",
+            "type": "dart",
             "request": "launch",
-            "type": "dart"
+            "program": "lib/main.dart",
+            "flutterMode": "release"
         },
         {
-            "name": "netflix (profile mode)",
-            "request": "launch",
+            "name": "Flutter",
             "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
             "flutterMode": "profile"
         },
         {
-            "name": "netflix (release mode)",
-            "request": "launch",
+            "name": "Flutter: Attach to Device",
             "type": "dart",
-            "flutterMode": "release"
-        }
+            "request": "attach"
+        },
+        {
+            "name": "Flutter",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart"
+        },
+
     ]
 }

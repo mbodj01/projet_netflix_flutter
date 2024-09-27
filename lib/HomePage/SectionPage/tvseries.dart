@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:netflix/apikey/apikey.dart';
+import 'package:netflix/reapeted_fuctions/slider.dart';
 
 class Tvseries extends StatefulWidget {
   const Tvseries({super.key});
@@ -13,8 +14,14 @@ class Tvseries extends StatefulWidget {
 
 class _TvseriesState extends State<Tvseries> {
   List<Map<String, dynamic>> populartvseries = [];
+  List<Map<String, dynamic>> topratedtvseries = [];
+  List<Map<String, dynamic>> onairtvseries = [];
   var populartvseriesurl =
       'https://api.themoviedb.org/3/tv/popular?api_key=$apikey';
+  var topratedtvseriesurl =
+      'https://api.themoviedb.org/3/tv/top_rated?api_key=$apikey';
+  var onairtvseriesurl =
+      'https://api.themoviedb.org/3/tv/on_the_air?api_key=$apikey';
 
   Future<void> tvseriesfunction() async {
     var populartvresponse = await http.get(Uri.parse(populartvseriesurl));
@@ -33,6 +40,40 @@ class _TvseriesState extends State<Tvseries> {
     } else {
       print(populartvresponse.statusCode);
     }
+
+    var topratedtvresponse = await http.get(Uri.parse(topratedtvseriesurl));
+    if (topratedtvresponse.statusCode == 200) {
+      var tempdata = jsonDecode(topratedtvresponse.body);
+      var topratedtvjson = tempdata['results'];
+      for (var i = 0; i < topratedtvjson.length; i++) {
+        topratedtvseries.add({
+          "name": topratedtvjson[i]["name"],
+          "poster_path": topratedtvjson[i]["poster_path"],
+          "vote_average": topratedtvjson[i]["vote_average"],
+          "Date": topratedtvjson[i]["first_air_date"],
+          "id": topratedtvjson[i]["id"],
+        });
+      }
+    } else {
+      print(topratedtvresponse.statusCode);
+    }
+
+    var onairtvresponse = await http.get(Uri.parse(onairtvseriesurl));
+    if (onairtvresponse.statusCode == 200) {
+      var tempdata = jsonDecode(onairtvresponse.body);
+      var onairtvjson = tempdata['results'];
+      for (var i = 0; i < onairtvjson.length; i++) {
+        onairtvseries.add({
+          "name": onairtvjson[i]["name"],
+          "poster_path": onairtvjson[i]["poster_path"],
+          "vote_average": onairtvjson[i]["vote_average"],
+          "Date": onairtvjson[i]["first_air_date"],
+          "id": onairtvjson[i]["id"],
+        });
+      }
+    } else {
+      print(onairtvresponse.statusCode);
+    }
   }
 
   @override
@@ -48,36 +89,11 @@ class _TvseriesState extends State<Tvseries> {
           );
         else {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Padding(
-                padding: const EdgeInsets.only(left: 10.0, top: 15, bottom: 40),
-                child: Text("popular tv series"),
-              ),
-              Container(
-                height: 250,
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: populartvseries.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: NetworkImage(
-                                  'https://image.tmdb.org/t/p/w500${populartvseries[index]['poster_path']}'),
-                              fit: BoxFit.cover),
-                        ),
-                        margin: EdgeInsets.only(left: 13),
-                        width: 170,
-                      ),
-                    );
-                  },
-                ),
-              ),
+              sliderlist(populartvseries, "Popular tv series", "tv", 20),
+              sliderlist(onairtvseries, "On the air", "tv", 20),
+              sliderlist(topratedtvseries, "Top rated series", "tv", 20),
             ],
           );
         }
